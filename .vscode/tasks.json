@@ -1,0 +1,70 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		// テンプレート生成コマンド
+		{
+			"label": "Generate Python Template",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"./scripts/tools/generate_template.py",
+				"-d",
+				"${fileDirname}",
+				"-t",
+				"python"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+			}
+		},
+		{
+			"label": "Generate Go Template",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"./scripts/tools/generate_template.py",
+				"-d",
+				"${fileDirname}",
+				"-t",
+				"golang"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+			}
+		},
+		{
+			"label": "Generate Java Template",
+			"type": "shell",
+			"command": "python3",
+			"args": [
+				"./scripts/tools/generate_template.py",
+				"-d",
+				"${fileDirname}",
+				"-t",
+				"java"
+			],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+			}
+		},
+		// プログラムのビルド
+		{
+			"label": "Build C++ Program: Make Build",
+			"type": "shell",
+			"command": "make",
+			"args": [
+				"build"
+			],
+			"options": {
+				"cwd": "${fileDirname}",
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+			}
+		},
+	]
+}

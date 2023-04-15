@@ -1,0 +1,41 @@
+#! /bin/bash
+LANGUAGE=${1:-python} # python, go
+COMMAND=${2:-run} # run, delete
+MODE=${3:-current} # (w, workspace) or (c, current)
+
+CURRENT_DIR=`pwd`
+FOLDER=$(basename "$CURRENT_DIR")
+
+if [ "$LANGUAGE" == "python" ]; then
+    IMAGE='python:3.8.16-bullseye'
+    NAME="${FOLDER}.python"
+elif [ "$LANGUAGE" == "golang" ] || [ "$LANGUAGE" == "go" ]; then
+    IMAGE='golang:1.19.7'
+    NAME="${FOLDER}.golang"
+elif [ "$LANGUAGE" == "ubuntu" ]; then
+    IMAGE='ubuntu:latest'
+    NAME="${FOLDER}.ubuntu"
+    exit
+fi
+
+if [ "$COMMAND" == "run" ]; then
+    if !(docker ps | grep $NAME) > /dev/null; then
+        echo "create workspace"
+        docker run --rm \
+        -v ${CURRENT_DIR}:/Workspace \
+        --name $NAME \
+        -w /workspace \
+        $PORTFOWARD \
+        -itd $IMAGE bash
+    fi
+    echo "attach workspace"
+    docker exec -it \
+    -w /workspace \
+    $NAME \
+    bash
+elif [ "$COMMAND" == "delete" ] || [ "$COMMAND" == "rm" ]; then
+    echo "delete workspace"
+    docker rm --force $NAME
+else
+    exit
+fi
